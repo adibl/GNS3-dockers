@@ -1,1 +1,1 @@
-FROM continuumio/anaconda:latest
+FROM continuumio:anaconda:
