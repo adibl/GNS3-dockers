@@ -1,3 +1,3 @@
 FROM continuumio/anaconda
 
-RAN apt-get update
+RUN apt-get update
