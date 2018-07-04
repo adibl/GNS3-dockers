@@ -1,1 +1,2 @@
 FROM continuumio/anaconda
+RAN upt-get update
