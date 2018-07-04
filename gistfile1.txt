@@ -1,7 +1,3 @@
 FROM continuumio/anaconda
 
 RUN apt-get update
-RAN jupyter notebook --generate-config
-RAN conda install -c mhworth scapy
-RAN apt-get install nano
-RAN jupyter notebook --ip 0.0.0.0 --port 8888 --allow-root
