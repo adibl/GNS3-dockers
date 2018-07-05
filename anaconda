@@ -1,4 +1,4 @@
-FROM continuumio/anaconda
+FROM continuumio/anaconda:5.2.0
 
 USER root
 RUN apt-get update
