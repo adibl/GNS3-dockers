@@ -1,0 +1,6 @@
+FROM ubunto
+
+RUN apt-get update /
+    apt-get istall -y openssh-server
+RUN apt install python2.7 python-pip
+RUN pip install scapy
