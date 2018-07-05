@@ -1,72 +1,36 @@
 FROM jupyter/minimal-notebook
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
-
 USER root
+# Python dependencies
+RUN apt-get -y update && \
+  apt-get install -y python-qt4 && \
+  apt-get clean
 
-# ffmpeg for matplotlib anim
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Python 2
+USER jovyan
 
-USER $NB_UID
-
-# Install Python 3 packages
-# Remove pyqt and qt pulled in for matplotlib since we're only ever going to
-# use notebook-friendly backends in these images
-RUN conda install --quiet --yes \
-    'conda-forge::blas=*=openblas' \
-    'ipywidgets=7.2*' \
-    'pandas=0.23*' \
-    'numexpr=2.6*' \
-    'matplotlib=2.2*' \
-    'scipy=1.1*' \
-    'seaborn=0.8*' \
-    'scikit-learn=0.19*' \
-    'scikit-image=0.14*' \
-    'sympy=1.1*' \
-    'cython=0.28*' \
-    'patsy=0.5*' \
-    'statsmodels=0.9*' \
-    'cloudpickle=0.5*' \
+# Install Python 2 packages
+RUN conda install --yes \
+    'python=2.7*' \
+    'ipython=4.0*' \
+    'ipywidgets=4.0*' \
+    'pandas=0.16*' \
+    'matplotlib=1.4*' \
+    'scipy=0.15*' \
+    'seaborn=0.6*' \
+    'scikit-learn=0.16*' \
+    'scikit-image=0.11*' \
+    'sympy=0.7*' \
+    'cython=0.22*' \
+    'patsy=0.3*' \
+    'statsmodels=0.6*' \
+    'cloudpickle=0.1*' \
     'dill=0.2*' \
-    'numba=0.38*' \
-    'bokeh=0.12*' \
-    'sqlalchemy=1.2*' \
-    'hdf5=1.10*' \
-    'h5py=2.7*' \
-    'vincent=0.4.*' \
-    'beautifulsoup4=4.6.*' \
-    'protobuf=3.*' \
-    'xlrd'  && \
-    conda remove --quiet --yes --force qt pyqt && \
-    conda clean -tipsy && \
-    # Activate ipywidgets extension in the environment that runs the notebook server
-    jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
-    # Also activate ipywidgets extension for JupyterLab
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager@^0.35 && \
-    jupyter labextension install jupyterlab_bokeh@^0.5.0 && \
-    npm cache clean --force && \
-    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    rm -rf /home/$NB_USER/.node-gyp && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+    'numba=0.20*' \
+    'bokeh=0.9*' \
+    'gensim=0.12*' \
+    pyzmq \
+    && conda clean -yt
 RUN conda install -c mhworth scapy
-# Install facets which does not have a pip or conda package at the moment
-RUN cd /tmp && \
-    git clone https://github.com/PAIR-code/facets.git && \
-    cd facets && \
-    jupyter nbextension install facets-dist/ --sys-prefix && \
-    cd && \
-    rm -rf /tmp/facets && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
-# Import matplotlib the first time to build the font cache.
-ENV XDG_CACHE_HOME /home/$NB_USER/.cache/
-RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
-    fix-permissions /home/$NB_USER
-
-USER $NB_UID
+RUN jupyter notebook --generate-config
+USER root
