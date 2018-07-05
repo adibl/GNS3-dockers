@@ -15,4 +15,3 @@ RUN pip install netmiko
 RUN pip install scapy
 
 RUN jupyter notebook --generate-config
-USER root
