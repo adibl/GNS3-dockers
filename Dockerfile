@@ -1,8 +1,7 @@
 FROM continuumio/anaconda
 
 USER root
-RUN apt-get update 
-RUN apt-get upgrade
+RUN apt-get update
 RUN conda install -c anaconda pip
 RUN pip install cryptography
 RUN pip install paramiko
