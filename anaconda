@@ -7,5 +7,9 @@ RUN pip install cryptography
 RUN pip install paramiko
 RUN pip install netmiko
 RUN pip install scapy
+RUN pip install argparse
+RUN pip install msgpack
+RUN pip install Slowloris
+
 
 RUN jupyter notebook --generate-config
