@@ -3,13 +3,13 @@ FROM continuumio/anaconda:5.2.0
 USER root
 RUN apt-get update
 RUN conda install -c anaconda pip
-RUN pip install cryptography
-RUN pip install paramiko
-RUN pip install netmiko
-RUN pip install scapy
-RUN pip install argparse
-RUN pip install msgpack
-RUN pip install Slowloris
+RUN yes | pip install cryptography
+RUN yes | pip install paramiko
+RUN yes | pip install netmiko
+RUN yes | pip install scapy
+RUN yes | pip install argparse
+RUN yes | pip install msgpack
+RUN yes | pip install Slowloris
 
 
 RUN jupyter notebook --generate-config
